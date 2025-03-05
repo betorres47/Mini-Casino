@@ -9,7 +9,7 @@ import random
 import time
 
 wheel = {}                                                  # define wheel of prizes
-for x in range(11):
+for x in range(6):
     wheel[x] = 0.0
 for x in range(5, 11):
     wheel[x] = 1.0
@@ -17,7 +17,7 @@ for x in range(10, 16):
     wheel[x] = 2.0
 for x in range(15, 20):
     wheel[x] = 3.0
-wheel[20] = 0.0
+wheel[20] = 5.0
 
 #add function to scale output (or number of spins) ADD HERE
 

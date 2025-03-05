@@ -67,7 +67,7 @@ def riser():                                            # riser game
                 print("multiplier: 0.0")
                 break
 
-            if (count % 10) == 0:                       # add to count and lower_count when needed
+            if (count % 10) == 0:                       # add to count and lower_count when neede
                 lower_count += 1
                 percent = 0
                 print(f"{lower_count}{animation[0]}{lower_count + 1.0} Win: {count / 10}")

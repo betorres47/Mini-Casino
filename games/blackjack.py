@@ -81,7 +81,7 @@ def blackjack() -> float:                                                       
                     print("Bust! You lose.")
                     break
             else:
-                print("Invalid input, type (hit), (stay), (h), or (s)")             # error handling
+                print("Invalid input, type (hit), (stay))")                         # error handling
 
         print("Dealer's hand:", hand_ui(dealer_hand), "Total:", dealer_count)       # dealers turn, show is hand again
 
