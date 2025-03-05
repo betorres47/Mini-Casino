@@ -56,18 +56,18 @@ def riser():                                            # riser game
         input_thread.start()
 
         for x in range(0, 101):                         # for loop to get loading bar and counter
-            if stopped:                                 # if user decides to stop
+            if stopped:                                 # if user decides to stop print results
                 result = count / 10
                 print("You have won!")
                 print(f"multiplier: {count / 10}")
                 break
 
-            if count >= bust_point:
+            if count >= bust_point:                     # user busts
                 print("You have crashed!")
                 print("multiplier: 0.0")
                 break
 
-            if (count % 10) == 0:
+            if (count % 10) == 0:                       # add to count and lower_count when needed
                 lower_count += 1
                 percent = 0
                 print(f"{lower_count}{animation[0]}{lower_count + 1.0} Win: {count / 10}")
