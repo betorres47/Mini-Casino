@@ -1,6 +1,4 @@
-# - Blackjack/21
-
-# - deck of cards to randomly choose from, aces count as 1 if user_count + 11 > 21
+# - blackjack/21 - beto aka skrog 47
 
 # - user is dealt 2 cards from a deck of cards which is sampled with replacement to allow for a random sample with duplicate cards
 # - user is shown 2 brackets for the dealers cards, 1 blank
@@ -68,13 +66,13 @@ def blackjack() -> float:                                                       
         dealer_count = sum(value_card(card, 0) for card, _ in dealer_hand)
 
         print("Hand dealt:", hand_ui(user_hand), "/ Total:", user_count)                            # print the user/dealer cards to show the human
-        print("Dealer's hand: [Hidden],", f"{cards[dealer_hand[1][0]]} of {dealer_hand[1][1]}", "/ Total:", dealer_count)
+        print("Dealer's hand: [Hidden],", f"{cards[dealer_hand[1][0]]} of {dealer_hand[1][1]}")
 
         while user_count < 21:                                                  # while the user has not yet busted; determine their move
             move = input("(hit) or (stay)? ").strip().lower()                       # move is the input to the prompt "(hit) or (stay)?"
-            if move == "stay" or "s":                                               # if they stay, break
+            if move == "stay":                                               # if they stay, break
                 break
-            elif move == "hit" or "h":                                              # if they hit, update their count
+            elif move == "hit":                                              # if they hit, update their count
                 new_card = random_card()                                                # choose random card
                 user_hand.append(new_card)                                              # append to their hand
                 user_count += value_card(new_card[0], user_count)                       # calculate count
@@ -110,8 +108,10 @@ def blackjack() -> float:                                                       
 
         print(f"multiplier: {result}")
         play_again = input("Play again? (yes): ").strip().lower()
-        if play_again != "yes" or "y":
+        if play_again != "yes":
             break                                                               #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
+        else:
+            print("Invalid input, type (yes)")          # error handling
     return result                               # return the result, 2.0/1.0/0.0
 
 if __name__ == "__main__":
