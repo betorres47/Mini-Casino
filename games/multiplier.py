@@ -5,7 +5,7 @@
 # - if the bar exceeds a certain number (every 1.0), it resets
 # - riser increases by 0.20 per second
 # - enter to stop
-# - if crash, 0, if save, float @ save
+# - if crash, 0, if save, output float @ save
 
 import threading
 import time

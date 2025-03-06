@@ -24,7 +24,7 @@ wheel[20] = 5.0
 def spin(x):                                        # roll function to print a section of animation, and define a roll
     print(f"--0{wheel[x]}0--")
     print('0   |   0')
-    print(' 0  +  0 ')
+    print(' 0  +  0  ')
     print(' 0  +  0 ')
     print('0   |   0')
     return wheel[x]

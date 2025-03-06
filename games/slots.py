@@ -49,10 +49,10 @@ def slots():                                # slot function for the game itself,
         else:
             result = 0.0                                                                # if not, user has lost
             print("You have lost.")
-            print(f"multiplier: {result}")
+        print(f"multiplier: {result}")
 
-        play_again = input("Play again? (yes): ").strip().lower()                       #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
-        if play_again != "yes":
+        play_again = input("Play again? (enter): ").strip().lower()                       #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
+        if play_again != "":
             break
         else:
             print("Invalid input, type (yes)")

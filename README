@@ -1,0 +1,52 @@
+Mini Casino Project Q2 2025
+CS 101 Professor Rathi
+Created by Aaron Delgado and Beto Torres
+
+description of each file
+
+main.py
+    the purpose of the main file is to start and stop the main loop and communicate with the all other files (this will be
+    the main driver file). main will contain prompts to either enter the casino or store, and display the inventory,
+    money, upgrades, and cheese values.
+    - once in the casino, get data from games (games) -> main runs game function from selected file to get win X
+    - once in the shop, get data from (currency & stuff.py)
+    - main.py will calculate winnings using upgrades in inventory
+    - once game saved, main.py
+
+currency & stuff.py
+    the purpose of the currency and store file is to add and remove item from the inventory such as money, cheese, or
+    upgrades. this data is communicated to and from main.py. currency and stuff also has data saved on save.txt to save
+    number of upgrades purchased.
+
+games(
+    blackjack.py
+        classic blackjack - the user is dealt a hand and prompted if they want to hit or stay, closes to 21 wins
+        possible outputs include 0.0 for loss, 1.0 for push (tie), and 2.0 for win. (game is mostly strategy, some luck)
+    slots.py
+        3x3 slot machine - the user spins 3 wheels that go through an animation with 3 random elements on each wheel
+        giving a 1 in 9 chance of all 3 elements being the same - if this happens; output 9.0, if not; 0.0. (game is
+        luck based)
+    wof.py
+        wheel of fortune - the user spins a wheel that goes through an animation (different than slots) and selects a
+        random prize, possible outputs include 0.0, 1.0, 2.0, 3.0, and 5.0. (game is luck based)
+    multiplier.py
+        riser - the user is prompted when they are ready to begin the rise, then once an input has been detected a
+        progress bar begins increasing and a win count begins to increase. The win count is a float that increases at a
+        rate of 0.1 per 0.5s, however once it reaches a certain predetermined value the game ends and if the player has
+        not cashed out by then then they loose. This game is my favorite as it makes for some high-intensity betting on
+        when the stock will crash. Possible outputs include any number from 0.0 to 10. See multiplier.py for more info
+        about the distribution of outputs and the threading setup. (game is half luck, half skill)
+    --games to be made--
+    stacker.py
+        stacker - the user is shown an animation of a bar sliding in the console and must send an input at the correct
+        time to 'stack' a bar on top of the old bar. Since this function has not been created a lof of liberties can
+        betaken here: the output should be proportional to the size of the stack (game is purely skill based)
+    cheetah.py
+        2 potential versions for cheetah game:
+        cheetahv1 - the user is prompted when they are ready to begin the chase: mash a button to chase the cheetah, more
+        times button got pressed in set time; larger payout.
+        cheetahv2 - the user is prompted when they are ready: some random time between 1 - 10 is chosen, and an
+        animation is displayed remaining blank until the time goes up. The closer the user's input is to the timer going
+        off, the larger the payout they receive.
+        (both games are skill based, i'm leaning more towards implementing the 2nd version)
+    )
