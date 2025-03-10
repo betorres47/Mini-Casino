@@ -69,7 +69,6 @@ class Shop:
             "Purchase Multiplier Upgrade": 10000,
             "Cheese Wheel": 2000,
             "Huge Cheese Wheel": 15000,
-            "Free Bailout": 50000,
             "Prize Doubler": 10000,
             "Random Prize Multiplier": 1000,
         }
