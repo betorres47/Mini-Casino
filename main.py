@@ -5,7 +5,6 @@ from games.slots import slots
 from games.riser import riser
 from games.wof import wof
 import random
-import json
 
 class MainMenu:
     def __init__(self, coins_instance, item_instance, cheese_instance, upgrades_instance, shop_instance):
@@ -14,7 +13,7 @@ class MainMenu:
         self.cheese = cheese_instance
         self.upgrades = upgrades_instance
         self.shop = shop_instance
-        self.active_item = None  # Ensures active_item always exists
+        self.active_item = None
 
     def display_menu(self):
         while True:
@@ -32,31 +31,38 @@ class MainMenu:
             if choice == "1":
                 self.play_game()
             elif choice == "2":
-                print("Your Inventory:", self.items.display_items())
+                self.display_inventory()
             elif choice == "3":
                 self.shop.display_shop()
-                item_name = input("Enter item name to buy or type 'sell' to sell an item: ").strip()
-
-                if item_name.lower() == "sell":
-                    sell_item = input("Enter the item name to sell: ").strip()
-                    self.shop.selling(sell_item)
-                elif item_name.lower() != 'exit':
-                    quantity = int(input("Enter quantity: "))
-                    self.shop.buying(item_name, quantity)
             elif choice == "4":
                 print("Coins:", self.coins.display_coins())
                 print("Cheese:", self.cheese.display_cheese())
             elif choice == "5":
-                filename = input("Enter save file name: ").strip()
-                self.save_data(filename)
+                self.save_data("save")
             elif choice == "6":
-                filename = input("Enter save file name: ").strip()
-                self.load_data(filename)
+                self.load_data("save")
             elif choice == "7":
                 print("Exiting the casino. See you next time!")
                 break
             else:
                 print("Invalid choice. Please enter a number between 1 and 7.")
+
+    def display_inventory(self):
+        """Displays both regular inventory items and multipliers."""
+        print("\n===== Inventory =====")
+
+        # Display regular items
+        if self.items.items:
+            print("Items:")
+            for item, qty in self.items.items.items():
+                print(f"- {item} (x{qty})")
+        else:
+            print("No items in inventory.")
+
+        # Display multipliers separately
+        print("\nMultipliers:")
+        print(f"- Winning Multiplier: {self.upgrades.winning_multiplier:.2f}x")
+        print(f"- Purchase Multiplier: {self.upgrades.purchase_multiplier:.2f}x")
 
     def play_game(self):
         games = {
@@ -77,26 +83,24 @@ class MainMenu:
             game_choice = input("\nEnter the number of the game you want to play: ").strip()
 
             if game_choice == "0":
-                return  # Return to the main menu
+                return
 
             if game_choice in games:
-                game_name, game_function = games[game_choice]  # Get actual game name and function
+                game_name, game_function = games[game_choice]
 
-                # **Allow the Player to Use an Item Before Betting**
                 self.use_item()
 
-                bet = self.get_valid_bet()  # Get a valid bet amount from the player
-                winnings_multiplier = game_function()  # Run the game and get the result
+                bet = self.get_valid_bet()
+                winnings_multiplier = game_function()
 
-                print(f"Game Result: {winnings_multiplier}x multiplier")  # Show raw game output
+                print(f"Game Result: {winnings_multiplier}x multiplier")
 
-                # **Apply Item Effects Last**
                 winnings_multiplier = self.apply_item_effects(winnings_multiplier)
 
-                self.handle_transactions(bet, winnings_multiplier, game_name)  # Handle money transactions
+                self.handle_transactions(bet, winnings_multiplier, game_name)
                 print("\n===== Updated Balances =====")
                 print(f"Total Coins: {self.coins.display_coins()}")
-                print(f"Total Cheese: {self.cheese.display_cheese()}")  # Show updated balance
+                print(f"Total Cheese: {self.cheese.display_cheese()}")
 
             else:
                 print("Invalid choice. Please enter a number from the list.")
@@ -115,33 +119,22 @@ class MainMenu:
                 print("Invalid input. Please enter a numeric value.")
 
     def handle_transactions(self, bet_amount, winnings_multiplier, game_name):
-        """
-        Handles money transactions: deducts bet, applies winnings, and updates balance.
-        Ensures that item multipliers are applied last.
-        """
-
-        self.coins.remove_coins(bet_amount)  # Deduct the bet first
+        self.coins.remove_coins(bet_amount)
 
         if game_name == "multiplier":
-            # Special case: If the Rising Multiplier crashes, the player loses everything
             if winnings_multiplier == 0:
                 print("You crashed! You lost your bet!")
-                return  # No winnings, no need to add anything
+                return
         elif winnings_multiplier < 1:
             print("You lost your bet!")
-            return  # No need to add winnings if it's a loss
+            return
         elif winnings_multiplier == 1:
             print("It's a draw! You keep your bet.")
-            self.coins.add_coins(bet_amount)  # Return the bet to player
+            self.coins.add_coins(bet_amount)
             return
 
-        # Step 1: Apply base winnings and upgrades
         winnings = bet_amount * winnings_multiplier * self.upgrades.winning_multiplier
-
-        # Step 2: Apply item effects LAST
         winnings = self.apply_item_effects(winnings)
-
-        # Add final winnings to player balance
         self.coins.add_coins(winnings)
 
         print(f"You won {winnings:.2f} coins!")
@@ -159,38 +152,33 @@ class MainMenu:
 
         if item_choice in self.items.items and self.items.items[item_choice] > 0:
             print(f"Using {item_choice}...")
-            self.items.remove_item(item_choice)  # Remove item from inventory
-            self.active_item = item_choice  # Store the active item for the game
+            self.items.remove_item(item_choice)
+            self.active_item = item_choice
         else:
             print("Invalid choice or no such item available.")
-            self.active_item = None  # No active item
+            self.active_item = None
 
     def apply_item_effects(self, winnings):
         if self.active_item:
             if self.active_item == "Prize Doubler":
-                winnings *= 2  # Double the winnings
+                winnings *= 2
                 print("Prize Doubler applied! Winnings doubled.")
             elif self.active_item == "Random Prize Multiplier":
-                random_multiplier = random.uniform(0.5, 3.0)  # Multiplier between 0.5x and 3.0x
+                random_multiplier = random.uniform(0.5, 3.0)
                 winnings *= random_multiplier
                 print(f"Random Prize Multiplier applied! Winnings multiplied by {random_multiplier:.2f}x.")
 
-        # Ensure the item effect is cleared after use
         self.active_item = None
         return winnings
 
     def save_data(self, filename="save"):
-        """
-        Saves player data to a text file in a structured format.
-        """
         try:
             with open(filename, "w", encoding="utf-8") as file:
                 file.write("{\n")
                 file.write(f'    "coins": {self.coins.display_coins()},\n')
                 file.write(f'    "items": {str(self.items.items)},\n')
                 file.write(f'    "cheese": {{\n')
-                file.write(f'        "Cheese Slices": {self.cheese.cheese_slices},\n')
-                file.write(f'        "Cheese Flakes": {self.cheese.cheese_flakes}\n')
+                file.write(f'        "Cheese Slices": {self.cheese.cheese_slices}\n')
                 file.write(f'    }},\n')
                 file.write(f'    "winning_multiplier": {self.upgrades.winning_multiplier},\n')
                 file.write(f'    "purchase_multiplier": {self.upgrades.purchase_multiplier}\n')
@@ -201,9 +189,6 @@ class MainMenu:
             print(f"Error saving game: {e}")
 
     def load_data(self, filename="save"):
-        """
-        Loads player data from a text file formatted like a dictionary.
-        """
         try:
             with open(filename, "r", encoding="utf-8") as file:
                 lines = file.readlines()
@@ -212,10 +197,10 @@ class MainMenu:
             current_section = None
 
             for line in lines:
-                line = line.strip().rstrip(",")  # Remove leading/trailing spaces and commas
+                line = line.strip().rstrip(",")
 
                 if line.startswith("{") or line.startswith("}"):
-                    continue  # Skip opening and closing brackets
+                    continue
 
                 if ":" in line:
                     key, value = line.split(":", 1)
@@ -223,7 +208,7 @@ class MainMenu:
 
                     if key == "items":
                         value = value.strip()
-                        data[key] = eval(value) if value != "{}" else {}  # Convert to dictionary
+                        data[key] = eval(value) if value != "{}" else {}
                     elif key in ["coins", "winning_multiplier", "purchase_multiplier"]:
                         data[key] = float(value) if "." in value else int(value)
                     elif key == "cheese":
@@ -233,11 +218,9 @@ class MainMenu:
                         sub_key = key.strip().strip('"')
                         data["cheese"][sub_key] = int(value)
 
-            # Apply loaded data
             self.coins.coins = data.get("coins", 0)
             self.items.items = data.get("items", {})
             self.cheese.cheese_slices = data["cheese"].get("Cheese Slices", 0)
-            self.cheese.cheese_flakes = data["cheese"].get("Cheese Flakes", 0)
             self.upgrades.winning_multiplier = data.get("winning_multiplier", 1.0)
             self.upgrades.purchase_multiplier = data.get("purchase_multiplier", 1.0)
 
@@ -247,7 +230,6 @@ class MainMenu:
         except Exception as e:
             print(f"Error loading save file: {e}")
 
-
 if __name__ == "__main__":
     coins = currencyandstuff.Coins()
     items = currencyandstuff.Item()
@@ -255,6 +237,6 @@ if __name__ == "__main__":
     upgrades = currencyandstuff.Upgrades()
     shop = currencyandstuff.Shop(coins, items, cheese, upgrades)
 
-    MainMenu.load_data(coins, items, cheese)
     main = MainMenu(coins, items, cheese, upgrades, shop)
+    main.load_data("save")
     main.display_menu()

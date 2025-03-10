@@ -25,7 +25,6 @@ class Item:
 class Cheese:
     def __init__(self):
         self.cheese_slices = 0
-        self.cheese_flakes = 0
 
     def add_cheese(self, amount):
         self.cheese_slices += amount
@@ -37,7 +36,7 @@ class Cheese:
             print("Not enough cheese slices")
 
     def display_cheese(self):
-        return {"Cheese Slices": self.cheese_slices, "Cheese Flakes": self.cheese_flakes}
+        return {"Cheese Slices": self.cheese_slices}
 
 
 class Coins:
@@ -74,53 +73,107 @@ class Shop:
             "Prize Doubler": 10000,
             "Random Prize Multiplier": 1000,
         }
+        self.special_items = {
+            "Super Cool Trophy": 100000000
+        }
+
+    def display_shop(self):
+        print("\n===== Shop Inventory =====")
+        print(f"Total Coins: {self.coins_instance.display_coins()} coins")
+        print(f"Total Cheese Slices: {self.cheese_instance.cheese_slices}")
+
+        for index, (item, price) in enumerate(self.shop_inventory.items(), start=1):
+            print(f"{index}. {item} - {price} coins")
+
+        print("\n===== Special Items (Cheese Slices Only) =====")
+        for index, (item, price) in enumerate(self.special_items.items(), start=len(self.shop_inventory) + 1):
+            print(f"{index}. {item} - {price} cheese slices")
+
+        while True:
+            item_choice = input("Enter item number or name to buy, type 'sell' to sell, or 'exit' to leave: ").strip()
+
+            if item_choice.lower() == "exit":
+                break
+            elif item_choice.lower() == "sell":
+                sell_item = input("Enter the item name to sell: ").strip()
+                self.selling(sell_item)
+            elif item_choice.isdigit():
+                item_index = int(item_choice) - 1
+                if 0 <= item_index < len(self.shop_inventory):
+                    item_name = list(self.shop_inventory.keys())[item_index]
+                    quantity = int(input("Enter quantity: "))
+                    self.buying(item_name, quantity)
+                elif len(self.shop_inventory) <= item_index < len(self.shop_inventory) + len(self.special_items):
+                    special_item_name = list(self.special_items.keys())[item_index - len(self.shop_inventory)]
+                    self.buy_special_item(special_item_name)
+                else:
+                    print("Invalid item number!")
+            else:
+                quantity = int(input("Enter quantity: "))
+                self.buying(item_choice, quantity)
 
     def buying(self, item_name, quantity=1):
-        if quantity <= 0:
-            print("Invalid quantity. Please enter a positive number.")
+        """Handles purchasing items while ensuring multipliers do not appear in inventory."""
+        if item_name in self.special_items:
+            if self.cheese_instance.cheese_slices >= self.special_items[item_name]:
+                self.cheese_instance.remove_cheese(self.special_items[item_name])
+                self.item_instance.add_items(item_name, 1)
+                print(f"Successfully purchased {item_name}!")
+            else:
+                print("You don't have enough cheese slices!")
             return
 
         if item_name in self.shop_inventory:
-            price = self.shop_inventory[item_name] * quantity
-            if self.coins_instance.coins >= price:
-                self.coins_instance.remove_coins(price)
+            if item_name in ["Prize Multiplier Upgrade", "Purchase Multiplier Upgrade"]:
+                quantity = 1  #Force quantity to 1 for multipliers
+
+            base_price = self.shop_inventory[item_name] * quantity
+            final_price = base_price * self.upgrades_instances.purchase_multiplier
+
+            if self.coins_instance.coins >= final_price:
+                self.coins_instance.remove_coins(final_price)
+
+                # Apply effects directly for multipliers, do NOT store them in inventory
                 if item_name == "Prize Multiplier Upgrade":
                     self.upgrades_instances.add_winning_multiplier()
-                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)
                 elif item_name == "Purchase Multiplier Upgrade":
                     self.upgrades_instances.add_purchase_multiplier()
-                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)
-                elif item_name in ["Free Bailout", "Prize Doubler", "Random Prize Multiplier"]:
+                else:
                     self.item_instance.add_items(item_name, quantity)
-                elif item_name == "Cheese Wheel":
-                    self.cheese_instance.add_cheese(quantity * 1000)
-                elif item_name == "Huge Cheese Wheel":
-                    self.cheese_instance.add_cheese(quantity * 10000)
 
-                print(f"Successfully purchased {quantity} {item_name}(s)!")
+                print(f"Successfully purchased {quantity} {item_name}(s) for {final_price:.2f} coins!")
             else:
-                print("You don't have enough coins to buy!")
+                print("You don't have enough coins!")
+
+    def buy_special_item(self, item_name):
+        """Handles buying special items using cheese slices."""
+        if item_name in self.special_items:
+            price = self.special_items[item_name]
+            if self.cheese_instance.cheese_slices >= price:
+                self.cheese_instance.remove_cheese(price)
+                self.item_instance.add_items(item_name, 1)
+                print(f"Successfully purchased {item_name}!")
+            else:
+                print("You don't have enough cheese slices!")
         else:
             print("This item is not available in the shop!")
 
     def selling(self, item_name):
+        """Handles selling items back to the shop, ensuring multipliers cannot be sold."""
+        if item_name in ["Prize Multiplier Upgrade", "Purchase Multiplier Upgrade"]:
+            print("You cannot sell upgrades!")
+            return
+
         if item_name in self.item_instance.items and self.item_instance.items[item_name] > 0:
-            if item_name in self.shop_inventory:  # Ensure it's a valid shop item
-                sell_price = self.shop_inventory[item_name] // 2  # Sell for half price
+            if item_name in self.shop_inventory:
+                sell_price = self.shop_inventory[item_name] // 2
+                self.coins_instance.add_coins(sell_price)
+                self.item_instance.remove_item(item_name)
+                print(f"Sold {item_name} for {sell_price} coins!")
             else:
-                print("You cannot sell this item.")
-                return
+                print("This item cannot be sold.")
 
-            self.coins_instance.add_coins(sell_price)
-            self.item_instance.remove_item(item_name)
-            print(f"Successfully sold {item_name} for {sell_price} coins!")
-        else:
-            print(f"You don't have any {item_name} to sell.")
 
-    def display_shop(self):
-        print("\n===== Shop Inventory =====")
-        for index, (item, price) in enumerate(self.shop_inventory.items(), start=1):
-            print(f"{index}. {item} - {price} coins")
 
 class Upgrades:
     """Handles upgrades for prize multipliers and purchase discounts."""
