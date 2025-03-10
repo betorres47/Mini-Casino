@@ -15,7 +15,7 @@ from games.win_screen import win
 k = 0.167
 theta = 102
 
-animation = {
+animation = {                                   # dictionary of animations
     0: "[##########]",
     1: "[#---------]",
     2: "[##--------]",
@@ -30,14 +30,14 @@ animation = {
 
 stopped_event = threading.Event()               # use event (problems with boolean)
 
-def get_input():
+def get_input():                                # set up input threading function to monitor for user input
     input()
     stopped_event.set()                         # signal the main thread to stop
 
 def riser():
     input("Ready to play? (Enter)")
 
-    stopped_event.clear()
+    stopped_event.clear()                       # ensure input is cleared
     lower_count = 0.0
     count = 0
     sample = gamma.rvs(k, scale=theta, size=1) + 4
