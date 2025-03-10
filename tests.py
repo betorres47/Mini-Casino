@@ -59,41 +59,39 @@ class TestCoins(unittest.TestCase):                                             
         self.assertEqual(self.coins.display_coins(), 5000)
 
 
-class TestShop(unittest.TestCase):
-    def setUp(self):
+class TestShop(unittest.TestCase):                                                                  # test for shop (2 different ways to test)
+    def setUp(self):                                                                                # set up 500000 coins for the player and set up shop
         self.coins = Coins(50000)
         self.items = Item()
         self.cheese = Cheese()
         self.upgrades = Upgrades()
         self.shop = Shop(self.coins, self.items, self.cheese, self.upgrades)
 
-    @patch('builtins.input', side_effect=['Prize Multiplier Upgrade'])
+    @patch('builtins.input', side_effects=['Prize Multiplier Upgrade'])                                  # replace object with mock text for input
     @patch('builtins.print')
-    def test_buy_item(self, mock_print, mock_input):
-        # Test buying an item (Prize Multiplier Upgrade)
+    def test_buy_upgrade(self, mock_print, mock_input):                                                         # buy a Prize Multiplier Upgrade
         self.shop.buying("Prize Multiplier Upgrade")
         self.assertEqual(self.coins.display_coins(), 50000 - 10000 * self.upgrades.purchase_multiplier)
-        mock_print.assert_called_with("Remaining Coins: 40000")
+        mock_print.assert_called_with("Remaining Coins: 40000")                                                 # using mock print, check if the final line matches a successful purchase
 
-    @patch('builtins.input', side_effect=['Cheese Wheel'])
-    @patch('builtins.print')
-    def test_buy_cheese_item(self, mock_print, mock_input):
-        self.cheese.add_cheese(5000)
-        self.shop.buying("Cheese Wheel")
-        self.assertEqual(self.cheese.display_cheese(), {"Cheese Slices": 3000})  # After spending 2000 cheese slices
-        mock_print.assert_called_with("Successfully purchased Cheese Wheel!")
+    @patch('builtins.input', side_effecs=['Cheese Slice', '1'])                                           # replace objet with mock text for input
+    @patch('builtins.input')
+    def test_buy_cheese(self, mock_print, mock_input):
+        self.shop.buying("Cheese Wheel")                                                                        # simulate cheese buy
+        self.assertEqual(self.coins.display_coins(), 50000 - 2000 * self.upgrades.purchase_multiplier)          # make sure remaining coins match the expected value
 
 
-class TestUpgrades(unittest.TestCase):
-    def setUp(self):
+class TestUpgrades(unittest.TestCase):                                              # test for upgrades
+    def setUp(self):                                                                # set up with zero upgrades, both at 1.0
         self.upgrades = Upgrades()
 
     def test_add_winning_multiplier(self):
         initial_multiplier = self.upgrades.winning_multiplier
         self.upgrades.add_winning_multiplier()
-        self.assertGreater(self.upgrades.winning_multiplier, initial_multiplier)
+        self.assertGreater(self.upgrades.winning_multiplier, initial_multiplier)    # asserts if the final winning multiplier is greater than the initial, meaning purchase worked
+
 
     def test_add_purchase_multiplier(self):
         initial_multiplier = self.upgrades.purchase_multiplier
         self.upgrades.add_purchase_multiplier()
-        self.assertLess(self.upgrades.purchase_multiplier, initial_multiplier)
+        self.assertLess(self.upgrades.purchase_multiplier, initial_multiplier)      # asserts if the final purchase multiplier is less than the initial, meaning purchase worked

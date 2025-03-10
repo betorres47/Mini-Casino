@@ -44,7 +44,7 @@ games(
         rate of 0.1 per 0.5s, however once it reaches a certain predetermined value the game ends and if the player has
         not cashed out by then then they loose. This game is my favorite as it makes for some high-intensity betting on
         when the stock will crash. Possible outputs include any number from 0.0 to 10. See riser.py for more info
-        about the distribution of outputs and the threading setup. (game is 90% luck, 10% skill)
+        about the distribution of outputs and the threading setup below. (game is 90% luck, 10% skill)
 
     cheetah.py
         cheetah - the player is prompted when they are read to begin the reaction game, once an input has been detected
@@ -64,7 +64,11 @@ save.txt
 
 tests.py
     The purpose of this file is to provide a list of tests which will function to verify aspects of the main menu and
-    shop. Mock and Push have been used to verify input() and print() functions by creating 'false' player inputs.
+    shop. Mock and Push have been used to verify input() and print() functions by creating 'false' player inputs. We
+    did not create any tests for our games; because of the nature of the casino, the game returns a random value which
+    can even at times vary to the decimal. For this reason we cannot perform a test since we would have no set value to
+    look for (how are you supposed to create a consistent test if the nature of your game is a gamble) however we invite
+    you to play to your hearts content.
 
 use the following as save for a proper start (its also really easy to loose all of your money with 200 coins, lol)
 
@@ -97,8 +101,14 @@ material taught in CS 101. Explanations and reason for implementation is provide
         suspenseful 'rides' or whatever you call the rise. By having this strange skewed distribution the house takes
         the players money in most cases, however the payout potential is large therefore creating a well balances evil
         sunken cost fallacy.
+
         (in tests.py)
     - Mock
-        The purpose of mock inside of the test.py file is to have a test function create a predetermined input
-        automatically, which can be used to
+        The purpose of mock inside of the test.py file is to have a test function verify if the printed result matches
+        the expected result, it essentially creates a 'mock' or 'false' print and compares it to the expected. We use
+        this to ensure our test returns the correct print() -> meaning that our test worked.
     - Push
+        Sort of the same for mock, it makes a 'mock' input so that the user does not need to type anything into the
+        console. Again, I dont have en entire solid grasp on this concept, however when after testing I was able to
+        implemented properly into my program to work specifically in the Shop, where inputs are needed to simulate a
+        purchase.
