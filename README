@@ -2,16 +2,22 @@ Mini Casino Project Q2 2025
 CS 101 Professor Rathi
 Created by Aaron Delgado and Beto Torres
 
-description of each file
+main.py, currencyandstuff.py, and save.txt by Aaron / games(), tests.py, & README.txt by Beto
+We collaborated heavily on this project, much of the coding was done together and all concepts were reviewed together
+before implementation. Although we technically each wrote our own files we exchanged ideas a lot and often made changes
+to each other documents to ensure the code worked together properly.
+
+description of each file and game instructions, how to start a save, and description of code found outside of this class
 
 main.py
     the purpose of the main file is to start and stop the main loop and communicate with the all other files (this will be
     the main driver file). main will contain prompts to either enter the casino or store, and display the inventory,
     money, upgrades, and cheese values.
-    - once in the casino, get data from games (games) -> main runs game function from selected file to get win X
+    - once in the casino, get data from games (play a game) -> main runs game function from selected file to get win X
     - once in the shop, get data from (currency & stuff.py)
     - main.py will calculate winnings using upgrades in inventory
-    - once game saved, main.py
+    - once game saved, main.py should write the classes to the file
+    - once game loaded, main.py should read the classes from the file
 
 currency & stuff.py
     the purpose of the currency and store file is to add and remove item from the inventory such as money, cheese, or
@@ -20,27 +26,79 @@ currency & stuff.py
 
 games(
     blackjack.py
-        classic blackjack - the user is dealt a hand and prompted if they want to hit or stay, closes to 21 wins
+        classic blackjack - the player is dealt a hand and prompted if they want to hit or stay, closes to 21 wins
         possible outputs include 0.0 for loss, 1.0 for push (tie), and 2.0 for win. (game is mostly strategy, some luck)
+
     slots.py
-        3x3 slot machine - the user spins 3 wheels that go through an animation with 3 random elements on each wheel
+        3x3 slot machine - the player spins 3 wheels that go through an animation with 3 random elements on each wheel
         giving a 1 in 9 chance of all 3 elements being the same - if this happens; output 9.0, if not; 0.0. (game is
         luck based)
+
     wof.py
-        wheel of fortune - the user spins a wheel that goes through an animation (different than slots) and selects a
+        wheel of fortune - the player spins a wheel that goes through an animation (different than slots) and selects a
         random prize, possible outputs include 0.0, 1.0, 2.0, 3.0, and 5.0. (game is luck based)
-    multiplier.py
-        riser - the user is prompted when they are ready to begin the rise, then once an input has been detected a
+
+    riser.py
+        riser - the player is prompted when they are ready to begin the rise, then once an input has been detected a
         progress bar begins increasing and a win count begins to increase. The win count is a float that increases at a
         rate of 0.1 per 0.5s, however once it reaches a certain predetermined value the game ends and if the player has
         not cashed out by then then they loose. This game is my favorite as it makes for some high-intensity betting on
-        when the stock will crash. Possible outputs include any number from 0.0 to 10. See multiplier.py for more info
-        about the distribution of outputs and the threading setup. (game is half luck, half skill)
-    --games to be made--
+        when the stock will crash. Possible outputs include any number from 0.0 to 10. See riser.py for more info
+        about the distribution of outputs and the threading setup. (game is 90% luck, 10% skill)
+
+    cheetah.py
+        cheetah - the player is prompted when they are read to begin the reaction game, once an input has been detected
+        a timer for a random float of seconds between 3 and 7 is started. After the time is up the player must press
+        enter again as fast as possible to "dodge" the cheetah. Winnings can range from
+
     stacker.py     REMOVED - Overcomplicated and not really an easy game to make in python console
-        stacker - the user is shown an animation of a bar sliding in the console and must send an input at the correct
+        stacker - the player is shown an animation of a bar sliding in the console and must send an input at the correct
         time to 'stack' a bar on top of the old bar. Since this function has not been created a lof of liberties can
         betaken here: the output should be proportional to the size of the stack (game is purely skill based)
-    cheetah.py
-        cheetahv1 - the user is prompted when they are ready to begin the chase: mash a button to chase the cheetah, more
-        times button got pressed in set time; larger payout.
+    )
+    win_screen.py
+        a simple console art for when the player wins
+
+save.txt
+    This is where the data is saved and loaded from, although any name can be used for this file.
+
+tests.py
+    The purpose of this file is to provide a list of tests which will function to verify aspects of the main menu and
+    shop. Mock and Push have been used to verify input() and print() functions by creating 'false' player inputs.
+
+use the following as save for a proper start (its also really easy to loose all of your money with 200 coins, lol)
+
+/
+Coins: 200
+Items: {}
+Cheese Slices: 0
+Winning Multiplier: 1.0
+Purchase Multiplier: 1.0
+Multiplier Prices:
+  Prize Multiplier Upgrade: 1000
+  Purchase Multiplier Upgrade: 1000
+/
+
+The following list are the libraries, functions, and math that had to be created using sources found outside of the
+material taught in CS 101. Explanations and reason for implementation is provided with all points.
+
+        (in riser.py)
+    - Threading
+        The Threading library was used because it is not possible to monitor for an input while executing another set of
+        code in the same instance using default python; with threading we were able to get the riser() function to run
+        continuously alongside the get_input(). To my understanding, multithreading 2 functions must be done by having a
+        common global variable in this case stopped_event as the global variable. To be completely transparent there are
+        elements of multi-threading in python of which I mat be able to improve my knowledge. However for the code that
+        I wrote 2 threaded functions and 1 global variable was all that was needed.
+    - Spicy Stats
+        The usage of the Spicy Stats library was to accomplish an even more unfair set of odds for the player in riser;
+        by using a Gamma plot with those set parameters, we ensure that more often players will not not even make it
+        past 1.0x, however in the cases that the riser goes above ~1.0x the probability changes to create long and
+        suspenseful 'rides' or whatever you call the rise. By having this strange skewed distribution the house takes
+        the players money in most cases, however the payout potential is large therefore creating a well balances evil
+        sunken cost fallacy.
+        (in tests.py)
+    - Mock
+        The purpose of mock inside of the test.py file is to have a test function create a predetermined input
+        automatically, which can be used to
+    - Push

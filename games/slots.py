@@ -1,6 +1,6 @@
 # - (random) slots
 
-# - user is shown a short animation for the wheels
+# - player is shown a short animation for the wheels
 # - the final roll is selected
 # - if all values are the same, win! if not, loose!
 # - win multiplier of 9.0 -> 1/9 chance of winning
@@ -42,11 +42,11 @@ def slots():                                # slot function for the game itself,
         time.sleep(0.5)
     final_slots = roll()
 
-    if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if user has won
+    if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if player has won
         result = 9.0
         win()
     else:
-        result = 0.0                                                                # if not, user has lost
+        result = 0.0                                                                # if not, player has lost
         print("You have lost.")
     print(f"multiplier: {result}")
     return result

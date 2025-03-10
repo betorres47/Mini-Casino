@@ -1,8 +1,8 @@
-Coins: 100000
+Coins: 200
 Items: {}
 Cheese Slices: 0
 Winning Multiplier: 1.0
 Purchase Multiplier: 1.0
 Multiplier Prices:
-  Prize Multiplier Upgrade: 10000
-  Purchase Multiplier Upgrade: 10000
+  Prize Multiplier Upgrade: 1000
+  Purchase Multiplier Upgrade: 1000

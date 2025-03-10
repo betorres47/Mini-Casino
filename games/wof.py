@@ -1,6 +1,6 @@
 # - wheel of fortune (wof)
 
-# - user is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
+# - player is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
 # - the final prize is selected
 # - prize is revealed (TBD implemented w/ shop maybe)
 
@@ -38,9 +38,9 @@ def wof():                                                                      
                 counter = 0
             time.sleep(0.05)
         result = wheel[counter]                                                       # result
-        if result != 0:                                                               # user wins
+        if result != 0:                                                               # player wins
             win()
-        else:                                                                         # user looses
+        else:                                                                         # player looses
             print("You have lost.")
         print(f"multiplier: {result:.3f}x")
         return result

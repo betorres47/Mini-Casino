@@ -1,15 +1,15 @@
 # - infinite blackjack/21
 
-# - user is dealt 2 cards from a deck of cards which is sampled with replacement to allow for a random sample with duplicate cards
-# - user is shown 2 brackets for the dealers cards, 1 blank
-# - user is shown 2 brackets for their cards
-# - user is prompted to hit or stay
+# - player is dealt 2 cards from a deck of cards which is sampled with replacement to allow for a random sample with duplicate cards
+# - player is shown 2 brackets for the dealers cards, 1 blank
+# - player is shown 2 brackets for their cards
+# - player is prompted to hit or stay
 # - if they hit and are above 21, instant loss
-# - repeat 5&6 until user stays
+# - repeat 5&6 until player stays
 # - dealer hits if they are 16 or under, stays at 17 or over
-# - user beats dealer -> 2.0
-# - dealer beats user -> 0.0
-# - user and dealer tie -> 1.0
+# - player beats dealer -> 2.0
+# - dealer beats player -> 0.0
+# - player and dealer tie -> 1.0
 # - person closes to 21 wins
 # - error, return error message
 
@@ -59,25 +59,25 @@ def hand_ui(hand) -> str:                                                   # fu
 
 # blackjack game
 def blackjack() -> float:
-        user_hand = [random_card(), random_card()]                              # give the user/dealer a hand
+        player_hand = [random_card(), random_card()]                              # give the player/dealer a hand
         dealer_hand = [random_card(), random_card()]
 
-        user_count = sum(value_card(card, 0) for card, _ in user_hand)                  # give the user/dealer a total numeric count for their cards
+        player_count = sum(value_card(card, 0) for card, _ in player_hand)                  # give the player/dealer a total numeric count for their cards
         dealer_count = sum(value_card(card, 0) for card, _ in dealer_hand)
 
-        print("Hand dealt:", hand_ui(user_hand), "/ Total:", user_count)                            # print the user/dealer cards to show the human
+        print("Hand dealt:", hand_ui(player_hand), "/ Total:", player_count)                            # print the player/dealer cards to show the human
         print("Dealer's hand: [Hidden],", f"{cards[dealer_hand[1][0]]} of {dealer_hand[1][1]}")
 
-        while user_count < 21:                                                  # while the user has not yet busted; determine their move
+        while player_count < 21:                                                  # while the player has not yet busted; determine their move
             move = input("(hit) or (stay)? ").strip().lower()                       # move is the input to the prompt "(hit) or (stay)?"
             if move == "stay":                                               # if they stay, break
                 break
             elif move == "hit":                                              # if they hit, update their count
                 new_card = random_card()                                                # choose random card
-                user_hand.append(new_card)                                              # append to their hand
-                user_count += value_card(new_card[0], user_count)                       # calculate count
-                print("Your hand:", hand_ui(user_hand), "/ Total:", user_count)         # give output in console for updated hand
-                if user_count > 21:                                                     # if they bust during the hit; they lose, game over, break
+                player_hand.append(new_card)                                              # append to their hand
+                player_count += value_card(new_card[0], player_count)                       # calculate count
+                print("Your hand:", hand_ui(player_hand), "/ Total:", player_count)         # give output in console for updated hand
+                if player_count > 21:                                                     # if they bust during the hit; they lose, game over, break
                     print("Bust! You lose.")
                     break
             else:
@@ -91,14 +91,14 @@ def blackjack() -> float:
             dealer_count += value_card(new_card[0], dealer_count)               # calculate count
             print("Dealer hits:", hand_ui(dealer_hand), "Total:", dealer_count) # show new dealer hand
 
-        if user_count > 21:                                     # user loosing, user busted
+        if player_count > 21:                                     # player loosing, player busted
             result = 0.0
 
-        elif dealer_count > 21 or user_count > dealer_count:    # user  winning, dealer busted or user beats dealer
+        elif dealer_count > 21 or player_count > dealer_count:    # player  winning, dealer busted or player beats dealer
             win()
             result = 2.0
 
-        elif user_count < dealer_count:                         # user loosing, dealer beats user
+        elif player_count < dealer_count:                         # player loosing, dealer beats player
             print("House wins.")
             result = 0.0
 

@@ -1,15 +1,15 @@
 # - riser
 
-# - user is prompted if they are ready
-# - user is shown an animation of a bar rising (numbers going up)
+# - player is prompted if they are ready
+# - player is shown an animation of a bar rising (numbers going up)
 # - if the bar exceeds a certain number (every 1.0), it resets
 # - riser increases by 0.20 per second
 # - enter to stop
 # - if crash, 0, if save, output float @ save
 
-import threading
+import threading                                # used to monitor for input                     SEE README
 import time
-from scipy.stats import gamma                   # library to create statistical distributions
+from scipy.stats import gamma                   # library to create statistical distributions   SEE README
 from games.win_screen import win
 
 k = 0.167
@@ -28,9 +28,9 @@ animation = {                                   # dictionary of animations
     9: "[#########-]"
 }
 
-stopped_event = threading.Event()                       # use event (problems with boolean)
+stopped_event = threading.Event()                       # use event as global variable (problems with boolean)
 
-def get_input():                                        # set up input threading function to monitor for user input
+def get_input():                                        # set up input threading function to monitor for player input
     input()
     stopped_event.set()                                 # signal the main thread to stop
 
