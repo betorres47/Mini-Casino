@@ -41,7 +41,7 @@ class Cheese:
 
 
 class Coins:
-    def __init__(self, total_coins=0):
+    def __init__(self, total_coins=200):
         self.coins = total_coins
 
     def add_coins(self, amount):
@@ -76,6 +76,10 @@ class Shop:
         }
 
     def buying(self, item_name, quantity=1):
+        if quantity <= 0:
+            print("Invalid quantity. Please enter a positive number.")
+            return
+
         if item_name in self.shop_inventory:
             price = self.shop_inventory[item_name] * quantity
             if self.coins_instance.coins >= price:
@@ -101,7 +105,12 @@ class Shop:
 
     def selling(self, item_name):
         if item_name in self.item_instance.items and self.item_instance.items[item_name] > 0:
-            sell_price = self.shop_inventory.get(item_name, 100) // 2  # Default price if not in shop
+            if item_name in self.shop_inventory:  # Ensure it's a valid shop item
+                sell_price = self.shop_inventory[item_name] // 2  # Sell for half price
+            else:
+                print("You cannot sell this item.")
+                return
+
             self.coins_instance.add_coins(sell_price)
             self.item_instance.remove_item(item_name)
             print(f"Successfully sold {item_name} for {sell_price} coins!")
@@ -109,21 +118,6 @@ class Shop:
             print(f"You don't have any {item_name} to sell.")
 
     def display_shop(self):
-        for item, price in self.shop_inventory.items():
-            print(f"{item}: {price} coins")
-
-
-class Upgrades:
-    def __init__(self, winning_multiplier=1, purchase_multiplier=1):
-        self.winning_multiplier = winning_multiplier
-        self.purchase_multiplier = purchase_multiplier
-
-    def add_winning_multiplier(self):
-        self.winning_multiplier += 0.1
-
-    def add_purchase_multiplier(self):
-        self.purchase_multiplier -= 0.05
-
-    def display_both(self):
-        return self.winning_multiplier, self.purchase_multiplier
-
+        print("\n===== Shop Inventory =====")
+        for index, (item, price) in enumerate(self.shop_inventory.items(), start=1):
+            print(f"{index}. {item} - {price} coins")

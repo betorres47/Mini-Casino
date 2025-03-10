@@ -1,0 +1,11 @@
+
+{
+    "coins": 200,
+    "items": {},
+    "cheese": {
+        "Cheese Slices": 0,
+        "Cheese Flakes": 0
+    },
+    "winning_multiplier": 1.0,
+    "purchase_multiplier": 1.0
+}
