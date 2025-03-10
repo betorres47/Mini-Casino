@@ -179,46 +179,73 @@ class MainMenu:
         self.active_item = None
         return winnings
 
-    def save_data(self, filename="save_file.json"):
+    def save_data(self, filename="save"):
         """
-        Saves player data to a valid JSON file.
+        Saves player data to a text file in a structured format.
         """
-        data = {
-            "coins": self.coins.display_coins(),
-            "items": self.items.display_items() if self.items.items else {},
-            "cheese": self.cheese.display_cheese(),
-            "winning_multiplier": self.upgrades.winning_multiplier,
-            "purchase_multiplier": self.upgrades.purchase_multiplier
-        }
+        try:
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write("{\n")
+                file.write(f'    "coins": {self.coins.display_coins()},\n')
+                file.write(f'    "items": {str(self.items.items)},\n')
+                file.write(f'    "cheese": {{\n')
+                file.write(f'        "Cheese Slices": {self.cheese.cheese_slices},\n')
+                file.write(f'        "Cheese Flakes": {self.cheese.cheese_flakes}\n')
+                file.write(f'    }},\n')
+                file.write(f'    "winning_multiplier": {self.upgrades.winning_multiplier},\n')
+                file.write(f'    "purchase_multiplier": {self.upgrades.purchase_multiplier}\n')
+                file.write("}\n")
 
-        json_string = json.dumps(data, indent=4)  # Convert data to a JSON string first
+            print(f"Game saved to {filename}!")
+        except Exception as e:
+            print(f"Error saving game: {e}")
 
-        with open(filename, "w", encoding="utf-8") as file:  # Open file in write mode
-            file.write(json_string)  # Write JSON string manually
-
-        print(f"Game saved to {filename}!")
-
-    def load_data(self, filename="save_file.json"):
+    def load_data(self, filename="save"):
         """
-        Loads player data from a JSON file.
+        Loads player data from a text file formatted like a dictionary.
         """
         try:
             with open(filename, "r", encoding="utf-8") as file:
-                json_string = file.read()  # Read entire file as a string
-                data = json.loads(json_string)  # Convert string back to JSON object
+                lines = file.readlines()
 
-            self.coins.coins = data["coins"]
-            self.items.items = data["items"]
-            self.cheese.cheese_slices = data["cheese"]["Cheese Slices"]
-            self.cheese.cheese_flakes = data["cheese"]["Cheese Flakes"]
-            self.upgrades.winning_multiplier = data["winning_multiplier"]
-            self.upgrades.purchase_multiplier = data["purchase_multiplier"]
+            data = {}
+            current_section = None
+
+            for line in lines:
+                line = line.strip().rstrip(",")  # Remove leading/trailing spaces and commas
+
+                if line.startswith("{") or line.startswith("}"):
+                    continue  # Skip opening and closing brackets
+
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    key = key.strip().strip('"')
+
+                    if key == "items":
+                        value = value.strip()
+                        data[key] = eval(value) if value != "{}" else {}  # Convert to dictionary
+                    elif key in ["coins", "winning_multiplier", "purchase_multiplier"]:
+                        data[key] = float(value) if "." in value else int(value)
+                    elif key == "cheese":
+                        current_section = "cheese"
+                        data[key] = {}
+                    elif current_section == "cheese":
+                        sub_key = key.strip().strip('"')
+                        data["cheese"][sub_key] = int(value)
+
+            # Apply loaded data
+            self.coins.coins = data.get("coins", 0)
+            self.items.items = data.get("items", {})
+            self.cheese.cheese_slices = data["cheese"].get("Cheese Slices", 0)
+            self.cheese.cheese_flakes = data["cheese"].get("Cheese Flakes", 0)
+            self.upgrades.winning_multiplier = data.get("winning_multiplier", 1.0)
+            self.upgrades.purchase_multiplier = data.get("purchase_multiplier", 1.0)
 
             print(f"Game loaded from {filename}!")
         except FileNotFoundError:
-            print(f"No save file found! Starting a new game.")
-        except json.JSONDecodeError:
-            print(f"Error loading save file! Data may be corrupted.")
+            print("No save file found! Starting a new game.")
+        except Exception as e:
+            print(f"Error loading save file: {e}")
 
 
 if __name__ == "__main__":
