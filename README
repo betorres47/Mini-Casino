@@ -9,22 +9,23 @@ to each other documents to ensure the code worked together properly.
 
 description of each file and game instructions, how to start a save, and description of code found outside of this class
 
-main.py
-    the purpose of the main file is to start and stop the main loop and communicate with the all other files (this will be
-    the main driver file). main will contain prompts to either enter the casino or store, and display the inventory,
-    money, upgrades, and cheese values.
-    - once in the casino, get data from games (play a game) -> main runs game function from selected file to get win X
-    - once in the shop, get data from (currency & stuff.py)
-    - main.py will calculate winnings using upgrades in inventory
-    - once game saved, main.py should write the classes to the file
-    - once game loaded, main.py should read the classes from the file
+    - main.py
+        the purpose of the main file is to start and stop the main loop and communicate with the all other files (this will be
+        the main driver file). main will contain prompts to either enter the casino or store, and display the inventory,
+        money, upgrades, and cheese values.
+        - once in the casino, get data from games (play a game) -> main runs game function from selected file to get win X
+        - once in the shop, get data from (currency & stuff.py)
+        - main.py will calculate winnings using upgrades in inventory
+        - once game saved, main.py should write the classes to the file
+        - once game loaded, main.py should read the classes from the file
 
-currency & stuff.py
-    the purpose of the currency and store file is to add and remove item from the inventory such as money, cheese, or
-    upgrades. this data is communicated to and from main.py. currency and stuff also has data saved on save.txt to save
-    number of upgrades purchased.
+    - currency & stuff.py
+        the purpose of the currency and store file is to add and remove item from the inventory such as money, cheese, or
+        upgrades. this data is communicated to and from main.py. currency and stuff also has data saved on save.txt to save
+        number of upgrades purchased.
 
-games(
+    games(
+
     blackjack.py
         classic blackjack - the player is dealt a hand and prompted if they want to hit or stay, closes to 21 wins
         possible outputs include 0.0 for loss, 1.0 for push (tie), and 2.0 for win. (game is mostly strategy, some luck)
@@ -55,20 +56,22 @@ games(
         stacker - the player is shown an animation of a bar sliding in the console and must send an input at the correct
         time to 'stack' a bar on top of the old bar. Since this function has not been created a lof of liberties can
         betaken here: the output should be proportional to the size of the stack (game is purely skill based)
-    )
+
     win_screen.py
         a simple console art for when the player wins
 
-save.txt
-    This is where the data is saved and loaded from, although any name can be used for this file.
+    )
 
-tests.py
-    The purpose of this file is to provide a list of tests which will function to verify aspects of the main menu and
-    shop. Mock and Push have been used to verify input() and print() functions by creating 'false' player inputs. We
-    did not create any tests for our games; because of the nature of the casino, the game returns a random value which
-    can even at times vary to the decimal. For this reason we cannot perform a test since we would have no set value to
-    look for (how are you supposed to create a consistent test if the nature of your game is a gamble) however we invite
-    you to play to your hearts content.
+    - save.txt
+        This is where the data is saved and loaded from, although any name can be used for this file.
+
+    - tests.py
+        The purpose of this file is to provide a list of tests which will function to verify aspects of the main menu and
+        shop. Mock and Push have been used to verify input() and print() functions by creating 'false' player inputs. We
+        did not create any tests for our games; because of the nature of the casino, the game returns a random value which
+        can even at times vary to the decimal. For this reason we cannot perform a test since we would have no set value to
+        look for (how are you supposed to create a consistent test if the nature of your game is a gamble) however we invite
+        you to play to your hearts content.
 
 use the following as save for a proper start (its also really easy to loose all of your money with 200 coins, lol)
 
