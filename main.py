@@ -21,6 +21,7 @@ from games.riser import riser
 from games.wof import wof
 import random
 
+#MainMenu class handles menu for the casino
 class MainMenu:
     def __init__(self, coins_instance, item_instance, cheese_instance, upgrades_instance, shop_instance):
         self.coins = coins_instance
@@ -28,9 +29,10 @@ class MainMenu:
         self.cheese = cheese_instance
         self.upgrades = upgrades_instance
         self.shop = shop_instance
-        self.active_item = None
+        self.active_item = None #Stores the item that is in use
 
     def display_menu(self):
+        #Displays and handles the choices the player makes
         while True:
             print("\n===== Mini Casino Menu =====")
             print("1. Play a Game")
@@ -63,7 +65,7 @@ class MainMenu:
                 print("Invalid choice. Please enter a number between 1 and 7.")
 
     def display_inventory(self):
-        """Displays both regular inventory items and multipliers."""
+        #Displays everything the play has
         print("\n===== Inventory =====")
 
         # Display regular items
@@ -80,6 +82,7 @@ class MainMenu:
         print(f"- Purchase Multiplier: {self.upgrades.purchase_multiplier:.2f}x")
 
     def play_game(self):
+        #Handles what game is chosen and how its executed
         games = {
             "1": ("blackjack", blackjack),
             "2": ("slots", slots),
@@ -121,6 +124,7 @@ class MainMenu:
                 print("Invalid choice. Please enter a number from the list.")
 
     def get_valid_bet(self):
+        #Makes sure the player puts a valid bet
         while True:
             try:
                 bet = float(input("Enter your bet amount: "))
@@ -134,6 +138,7 @@ class MainMenu:
                 print("Invalid input. Please enter a numeric value.")
 
     def handle_transactions(self, bet_amount, winnings_multiplier, game_name):
+        #Handles how much a play wins or loses
         self.coins.remove_coins(bet_amount)
 
         if game_name == "multiplier":
@@ -155,7 +160,8 @@ class MainMenu:
         print(f"You won {winnings:.2f} coins!")
 
     def use_item(self):
-        """Allows the player to use an item from their inventory if available."""
+        #Handles if a user uses an item or not
+        #Prompted before betting amount
         if not self.items.items:
             print("You have no items to use.")
             return
@@ -175,13 +181,14 @@ class MainMenu:
             # Ensure the selected item is valid
             if item_choice in self.items.items and self.items.items[item_choice] > 0:
                 print(f"Using {item_choice}...")
-                self.items.remove_item(item_choice)  # ✅ Remove used item from inventory
-                self.active_item = item_choice  # ✅ Store item to apply effects
+                self.items.remove_item(item_choice)  #Remove used item from inventory
+                self.active_item = item_choice  #Store item to apply effects
                 return
             else:
                 print("Invalid choice or no such item available. Please enter a valid item name.")
 
     def apply_item_effects(self, winnings):
+        #Handles the affect of each item
         if self.active_item:
             if self.active_item == "Prize Doubler":
                 winnings *= 2
@@ -191,11 +198,13 @@ class MainMenu:
                 winnings *= random_multiplier
                 print(f"Random Prize Multiplier applied! Winnings multiplied by {random_multiplier:.2f}x.")
 
-        self.active_item = None
+        self.active_item = None #ensures that the item affect doesn't carry over and resets
         return winnings
 
     def save_data(self, filename="save"):
-        """Saves player data to a text file, including updated multiplier prices."""
+        #Takes data stored in the code and edits the file accordingly
+        #Does full replacement of the code for it to be easier
+        #If there is an error it will display error code for the user to try and debug
         try:
             with open(filename, "w", encoding="utf-8") as file:
                 file.write(f"Coins: {self.coins.display_coins()}\n")
@@ -213,7 +222,8 @@ class MainMenu:
             print(f"Error saving game: {e}")
 
     def load_data(self, filename="save"):
-        """Loads player data from a text file, ensuring multiplier prices are restored correctly."""
+        #Uploads the data from the file to the game.
+        #This is the first function ran
         try:
             with open(filename, "r", encoding="utf-8") as file:
                 lines = file.readlines()
@@ -254,11 +264,13 @@ class MainMenu:
                         self.upgrades.winning_multiplier = float(value)
                     elif key == "Purchase Multiplier":
                         self.upgrades.purchase_multiplier = float(value)
-
+            #This will prompt if ran successfully
             print(f"Game loaded from {filename}!")
         except FileNotFoundError:
+            #This will prompt if the file is not found and will start
             print("No save file found! Starting a new game.")
         except Exception as e:
+            #This will prompt if different error occurs
             print(f"Error loading save file: {e}")
 
 
