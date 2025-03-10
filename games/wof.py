@@ -1,9 +1,8 @@
-# - wheel of fortune (wof) - beto
+# - wheel of fortune (wof)
 
 # - user is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
 # - the final prize is selected
 # - prize is revealed (TBD implemented w/ shop maybe)
-# - play again? y/n
 
 import random
 import time
@@ -46,5 +45,3 @@ def wof():                                                                      
         print(f"multiplier: {result:.3f}x")
         return result
 
-
-wof()

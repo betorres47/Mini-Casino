@@ -1,4 +1,4 @@
-# - riser - beto
+# - riser
 
 # - user is prompted if they are ready
 # - user is shown an animation of a bar rising (numbers going up)
@@ -84,7 +84,7 @@ def riser():
     print(f"multiplier: {result:.3f}x")
     return result
 
-riser()
+
 
 
 

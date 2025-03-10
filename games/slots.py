@@ -1,10 +1,9 @@
-# - (random) slots - beto
+# - (random) slots
 
 # - user is shown a short animation for the wheels
 # - the final roll is selected
 # - if all values are the same, win! if not, loose!
 # - win multiplier of 9.0 -> 1/9 chance of winning
-# - play again? y/n
 
 import random
 import time
@@ -52,6 +51,3 @@ def slots():                                # slot function for the game itself,
     print(f"multiplier: {result}")
     return result
 
-
-
-slots()
