@@ -14,7 +14,7 @@ from games.win_screen import win
 
 def cheetah():
     input("Press Enter to Begin...")
-    print("BEWARE OF THE CHEETAH!!! (press Enter to dodge!")      # begins reaction test
+    print("BEWARE OF THE CHEETAH!!! (press Enter to dodge!)")      # begins reaction test
 
     pause = random.randint(3000, 7000) / 1000               # determines number of seconds to wait before pouncing
     time.sleep(pause)
@@ -34,6 +34,6 @@ def cheetah():
         print("You have been mauled.")
         print(f"multiplier: {result:.3f}x")
 
-    print(f"You reacted in {reaction_time:.3f}s")
+    print(f"You reacted in {reaction_time:.3f}s")                 # display reaction time
     return result
 
