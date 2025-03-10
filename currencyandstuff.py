@@ -41,16 +41,16 @@ class Cheese:
 
 class Coins:
     def __init__(self, total_coins=200):
-        self.coins = total_coins
+        self.coins = round(total_coins)
 
     def add_coins(self, amount):
         self.coins += amount
-        self.coins = math.floor(self.coins * 100) / 100
+        self.coins = round(self.coins)
 
     def remove_coins(self, amount):
         if self.coins >= amount:
             self.coins -= amount
-            self.coins = math.floor(self.coins * 100) / 100
+            self.coins = round(self.coins)
         else:
             print("You don't have enough coins to buy!")
 
