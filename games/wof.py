@@ -30,7 +30,6 @@ def spin(x):                                        # roll function to print a s
     return wheel[x]
 
 def wof():                                                                            # wheel of fortune game
-    while True:
         counter = random.randint(0, 20)                                         #start wheel at a random point
         for x in range(50):                                                           # animation, 50 'ticks' each 0.05s apart
             spin(counter)
@@ -43,13 +42,7 @@ def wof():                                                                      
             print("You have won!")
         else:                                                                         # user looses
             print("You have lost.")
-
-        play_again = input("Play again? (yes): ").strip().lower()                       #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
-        if play_again != "yes":
-            break
-        else:
-            print("Invalid input, type (yes)")
-    return wheel[counter]
+        return wheel[counter]
 
 if __name__ == "__main__":
     wof()

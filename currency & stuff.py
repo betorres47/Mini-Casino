@@ -126,3 +126,4 @@ class Upgrades:
 
     def display_both(self):
         return self.winning_multiplier, self.purchase_multiplier
+

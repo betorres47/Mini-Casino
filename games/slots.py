@@ -31,31 +31,27 @@ def roll():                                 # roll function to print a section o
     return wheels
 
 def slots():                                # slot function for the game itself,
-    while True:
-        for x in range(0, 10):                                                         # animation
-            roll()
-            time.sleep(0.1)
-        for x in range(0, 3):
-            roll()
-            time.sleep(0.33)
-        for x in range(0, 2):
-            roll()
-            time.sleep(0.5)
-        final_slots = roll()
+    for x in range(0, 10):                                                         # animation
+        roll()
+        time.sleep(0.1)
+    for x in range(0, 3):
+        roll()
+        time.sleep(0.33)
+    for x in range(0, 2):
+        roll()
+        time.sleep(0.5)
+    final_slots = roll()
 
-        if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if user has won
-            result = 9.0
-            print("You have won!")
-        else:
-            result = 0.0                                                                # if not, user has lost
-            print("You have lost.")
-        print(f"multiplier: {result}")
+    if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if user has won
+        result = 9.0
+        print("You have won!")
+    else:
+        result = 0.0                                                                # if not, user has lost
+        print("You have lost.")
+    print(f"multiplier: {result}")
+    return result
 
-        play_again = input("Play again? (enter): ").strip().lower()                       #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
-        if play_again != "":
-            break
-        else:
-            print("Invalid input, type (yes)")
+
 
 
 if __name__ == "__main__":
