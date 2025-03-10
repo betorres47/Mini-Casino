@@ -1,4 +1,4 @@
-# - multiplier - beto aka skrog 47
+# - multiplier - beto
 
 # - user is prompted if they are ready
 # - user is shown an animation of a bar rising (numbers going up)
@@ -6,16 +6,15 @@
 # - riser increases by 0.20 per second
 # - enter to stop
 # - if crash, 0, if save, output float @ save
-
+# - multiplier - beto aka skrog 47
 import threading
 import time
 from scipy.stats import gamma
 
-k = 0.167                         # shape parameters for stats
+k = 0.167
 theta = 102
 
-
-animation = {                   # animation frames
+animation = {
     0: "[##########]",
     1: "[#---------]",
     2: "[##--------]",
@@ -28,57 +27,51 @@ animation = {                   # animation frames
     9: "[#########-]"
 }
 
-stopped = False                 # user input default false
+stopped_event = threading.Event()  # Use event instead of boolean
 
-def get_input():                # monitor for user input using global threat stopped
-    global stopped
+def get_input():
     input()
-    stopped = True              # set stopped to true if input is detected
+    stopped_event.set()  # Signal the main thread to stop
 
+def riser():
+    input("Ready to play? (Enter)")
 
+    stopped_event.clear()
+    lower_count = 0.0
+    count = 0
+    sample = gamma.rvs(k, scale=theta, size=1) + 4
+    bust_point = sample[0]  # Fix: Extract single value
 
-def riser():                                            # riser game
-    while True:
-        time.sleep(1)                                   # allow for threading to take place
-        input("Ready to play? (Enter)")                 # are you ready?
+    input_thread = threading.Thread(target=get_input)  # Remove daemon=True
+    input_thread.start()
 
-        global stopped                                  # threading
-        stopped = False                                 # reset variables
-        lower_count = 0.0
-        count:float = 0.0
-        sample = gamma.rvs(k, scale=theta, size=1)      # random crash point using gamma plot
-        bust_point = sample
-        percent = 0
+    percent = 0
+    while count <= 100:
+        result = lower_count + percent / 10.0
 
-        input_thread = threading.Thread(target=get_input, daemon=True)          # detect for input
-        input_thread.start()
+        if stopped_event.is_set():
+            print("You have won!")
+            print(f"multiplier: {result:.1f}")
+            break
 
-        for x in range(0, 101):                  # for loop to get loading bar and counter
+        if count >= bust_point:
+            print("You have crashed!")
+            print("multiplier: 0.0")
+            break
 
-            if stopped:                                 # if user decides to stop print results
-                result = count / 10
-                print("You have won!")
-                print(f"multiplier: {count / 10}")
-                break
+        percent = min(percent, 9)  # Fix: Prevent out-of-range key access
+        print(f"{lower_count}{animation[percent]}{lower_count + 1.0} Win: {result:.1f}")
 
-            if count >= bust_point:                     # user busts
-                print("You have crashed!")
-                print("multiplier: 0.0")
-                break
+        percent += 1
+        count += 1
 
-            if (count % 10) == 0:                       # add to count and lower_count when need
-                lower_count += 1
-                percent = 0
-                print(f"{lower_count}{animation[0]}{lower_count + 1.0} Win: {count / 10}")
-            else:
-                print(f"{lower_count}{animation[percent]}{lower_count + 1.0} Win: {count / 10}")
-            percent += 1
-            count += 1
-            time.sleep(0.5)
+        if count % 10 == 0:
+            lower_count += 1
+            percent = 0
 
+        time.sleep(0.5)
 
+    stopped_event.set()  # Ensure the input thread can stop
+    input_thread.join()  # Wait for the input thread to finish before exiting
 
-# ADD PLAY AGAIN
-
-if __name__ == "__main__":
-    riser()
+riser()

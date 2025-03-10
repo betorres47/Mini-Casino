@@ -42,11 +42,5 @@ games(
         time to 'stack' a bar on top of the old bar. Since this function has not been created a lof of liberties can
         betaken here: the output should be proportional to the size of the stack (game is purely skill based)
     cheetah.py
-        2 potential versions for cheetah game:
         cheetahv1 - the user is prompted when they are ready to begin the chase: mash a button to chase the cheetah, more
         times button got pressed in set time; larger payout.
-        cheetahv2 - the user is prompted when they are ready: some random time between 1 - 10 is chosen, and an
-        animation is displayed remaining blank until the time goes up. The closer the user's input is to the timer going
-        off, the larger the payout they receive.
-        (both games are skill based, i'm leaning more towards implementing the 2nd version)
-    )

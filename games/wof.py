@@ -1,4 +1,4 @@
-# - wheel of fortune (wof) - beto aka skrog 47
+# - wheel of fortune (wof) - beto
 
 # - user is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
 # - the final prize is selected
@@ -44,5 +44,5 @@ def wof():                                                                      
             print("You have lost.")
         return wheel[counter]
 
-if __name__ == "__main__":
-    wof()
+
+wof()
