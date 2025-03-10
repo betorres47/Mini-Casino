@@ -51,3 +51,5 @@ def slots():                                # slot function for the game itself,
     print(f"multiplier: {result}")
     return result
 
+if __name__ == "__main__":
+    slots()
