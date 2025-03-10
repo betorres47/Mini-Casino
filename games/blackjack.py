@@ -1,4 +1,4 @@
-# - infinite blackjack/21 - beto
+# - infinite blackjack/21
 
 # - user is dealt 2 cards from a deck of cards which is sampled with replacement to allow for a random sample with duplicate cards
 # - user is shown 2 brackets for the dealers cards, 1 blank
@@ -108,6 +108,6 @@ def blackjack() -> float:
         print(f"multiplier: {result:.3f}x")
         return result                                           # return the result, 2.0/1.0/0.0
 
-
-blackjack()
+if __name__ == "__main__":
+    blackjack()
 

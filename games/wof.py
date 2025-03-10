@@ -1,9 +1,8 @@
-# - wheel of fortune (wof) - beto
+# - wheel of fortune (wof)
 
 # - user is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
 # - the final prize is selected
 # - prize is revealed (TBD implemented w/ shop maybe)
-# - play again? y/n
 
 import random
 import time
@@ -31,20 +30,20 @@ def spin(x):                                        # roll function to print a s
     return wheel[x]
 
 def wof():                                                                            # wheel of fortune game
-        counter = random.randint(0, 20)                                         #start wheel at a random point
+        counter = random.randint(0, 20)                                         # start wheel at a random point
         for x in range(50):                                                           # animation, 50 'ticks' each 0.05s apart
             spin(counter)
             counter += 1
             if counter > 20:
                 counter = 0
             time.sleep(0.05)
-        result = wheel[counter]                                       # show the result
-        if result != 0:                                                       # user wins
+        result = wheel[counter]                                                       # result
+        if result != 0:                                                               # user wins
             win()
         else:                                                                         # user looses
             print("You have lost.")
         print(f"multiplier: {result:.3f}x")
         return result
 
-
-wof()
+if __name__ == "__main__":
+    wof()
