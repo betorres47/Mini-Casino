@@ -1,4 +1,4 @@
-# - wheel of fortune (wof) - beto aka skrog 47
+# - wheel of fortune (wof) - beto
 
 # - user is shown a short animation of a wheel and a list of prizes (the wheel goes though the animation in order)
 # - the final prize is selected
@@ -7,6 +7,7 @@
 
 import random
 import time
+from games.win_screen import win
 
 wheel = {}                                                  # define wheel of prizes
 for x in range(6):
@@ -37,12 +38,13 @@ def wof():                                                                      
             if counter > 20:
                 counter = 0
             time.sleep(0.05)
-        print(f"multiplier: {wheel[counter]}")                                        # show the result
-        if wheel[counter] != 0:                                                       # user wins
-            print("You have won!")
+        result = wheel[counter]                                       # show the result
+        if result != 0:                                                       # user wins
+            win()
         else:                                                                         # user looses
             print("You have lost.")
-        return wheel[counter]
+        print(f"multiplier: {result:.3f}x")
+        return result
 
-if __name__ == "__main__":
-    wof()
+
+wof()

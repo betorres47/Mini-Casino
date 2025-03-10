@@ -1,13 +1,14 @@
-# - (random) slots - beto aka skrog 47
+# - (random) slots - beto
 
 # - user is shown a short animation for the wheels
 # - the final roll is selected
-# - if all of the values are the same, win! if not, loose!
-# - win multiplier of 9.0
+# - if all values are the same, win! if not, loose!
+# - win multiplier of 9.0 -> 1/9 chance of winning
 # - play again? y/n
 
 import random
 import time
+from games.win_screen import win
 
 wheel = {                                   # wheel dictionary to define characters on wheel
     0: '=====',
@@ -44,7 +45,7 @@ def slots():                                # slot function for the game itself,
 
     if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if user has won
         result = 9.0
-        print("You have won!")
+        win()
     else:
         result = 0.0                                                                # if not, user has lost
         print("You have lost.")
@@ -53,6 +54,4 @@ def slots():                                # slot function for the game itself,
 
 
 
-
-if __name__ == "__main__":
-    slots()
+slots()
