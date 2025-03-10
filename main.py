@@ -1,4 +1,19 @@
-import currencyandstuff
+"""
+
+   ▄▄▄▄███▄▄▄▄    ▄█  ███▄▄▄▄    ▄█        ▄████████    ▄████████    ▄████████  ▄█  ███▄▄▄▄    ▄██████▄
+ ▄██▀▀▀███▀▀▀██▄ ███  ███▀▀▀██▄ ███       ███    ███   ███    ███   ███    ███ ███  ███▀▀▀██▄ ███    ███
+ ███   ███   ███ ███▌ ███   ███ ███▌      ███    █▀    ███    ███   ███    █▀  ███▌ ███   ███ ███    ███
+ ███   ███   ███ ███▌ ███   ███ ███▌      ███          ███    ███   ███        ███▌ ███   ███ ███    ███
+ ███   ███   ███ ███▌ ███   ███ ███▌      ███        ▀███████████ ▀███████████ ███▌ ███   ███ ███    ███
+ ███   ███   ███ ███  ███   ███ ███       ███    █▄    ███    ███          ███ ███  ███   ███ ███    ███
+ ███   ███   ███ ███  ███   ███ ███       ███    ███   ███    ███    ▄█    ███ ███  ███   ███ ███    ███
+  ▀█   ███   █▀  █▀    ▀█   █▀  █▀        ████████▀    ███    █▀   ▄████████▀  █▀    ▀█   █▀   ▀██████▀
+                                                                                                                     """
+
+
+
+
+import currencyandstuff                             # import all required libraries
 from games.blackjack import blackjack
 from games.cheetah import cheetah
 from games.slots import slots
@@ -148,15 +163,20 @@ class MainMenu:
         for item, qty in self.items.items.items():
             print(f"{item} (x{qty})")
 
-        item_choice = input("Enter the item name to use (or type 'none' to skip): ").strip().lower()
+        while True:
+            item_choice = input("Enter the item name to use (or type 'none' to skip): ").strip().lower()
 
-        if item_choice in self.items.items and self.items.items[item_choice] > 0:
-            print(f"Using {item_choice}...")
-            self.items.remove_item(item_choice)
-            self.active_item = item_choice
-        else:
-            print("Invalid choice or no such item available.")
-            self.active_item = None
+            if item_choice in self.items.items and self.items.items[item_choice] > 0:
+                print(f"Using {item_choice}...")
+                self.items.remove_item(item_choice)
+                self.active_item = item_choice
+                break
+            elif item_choice == "none":
+                self.active_item = None
+                break
+            else:
+                print("Invalid choice or no such item available.")
+
 
     def apply_item_effects(self, winnings):
         if self.active_item:
