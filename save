@@ -1,6 +1,6 @@
-Coins: 100000
-Items: {}
-Cheese Slices: 0
+Coins: 90000000
+Items: {'Prize Doubler': 1}
+Cheese Slices: 100000000
 Winning Multiplier: 1.0
 Purchase Multiplier: 1.0
 Multiplier Prices:
