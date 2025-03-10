@@ -57,8 +57,7 @@ def hand_ui(hand) -> str:                                                   # fu
 
 
 # blackjack game
-def blackjack() -> float:                                                       # while loop to ensure the game can be played again
-    while True:
+def blackjack() -> float:
         user_hand = [random_card(), random_card()]                              # give the user/dealer a hand
         dealer_hand = [random_card(), random_card()]
 
@@ -105,14 +104,8 @@ def blackjack() -> float:                                                       
         else:                                                   # push
             print("Push")
             result = 1.0
-
         print(f"multiplier: {result}")
-        play_again = input("Play again? (yes): ").strip().lower()
-        if play_again != "yes":
-            break                                                               #function to return to menu (work in progress) FIX THE FREAKING PLAY AGAIN FOR ALL GAMES!!
-        else:
-            print("Invalid input, type (yes)")          # error handling
-    return result                               # return the result, 2.0/1.0/0.0
+        return result                                           # return the result, 2.0/1.0/0.0
 
 if __name__ == "__main__":
     blackjack()

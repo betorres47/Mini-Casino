@@ -37,7 +37,7 @@ games(
         when the stock will crash. Possible outputs include any number from 0.0 to 10. See multiplier.py for more info
         about the distribution of outputs and the threading setup. (game is half luck, half skill)
     --games to be made--
-    stacker.py
+    stacker.py     REMOVED - Overcomplicated and not really an easy game to make in python console
         stacker - the user is shown an animation of a bar sliding in the console and must send an input at the correct
         time to 'stack' a bar on top of the old bar. Since this function has not been created a lof of liberties can
         betaken here: the output should be proportional to the size of the stack (game is purely skill based)
