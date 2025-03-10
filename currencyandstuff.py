@@ -90,62 +90,70 @@ class Shop:
             print(f"{index}. {item} - {price} cheese slices")
 
         while True:
-            item_choice = input("Enter item number or name to buy, type 'sell' to sell, or 'exit' to leave: ").strip()
+            item_choice = input("Enter item name to buy, type 'sell' to sell, or 'exit' to leave: ").strip()
 
             if item_choice.lower() == "exit":
                 break
             elif item_choice.lower() == "sell":
                 sell_item = input("Enter the item name to sell: ").strip()
                 self.selling(sell_item)
-            elif item_choice.isdigit():
-                item_index = int(item_choice) - 1
-                if 0 <= item_index < len(self.shop_inventory):
-                    item_name = list(self.shop_inventory.keys())[item_index]
-                    quantity = int(input("Enter quantity: "))
-                    self.buying(item_name, quantity)
-                elif len(self.shop_inventory) <= item_index < len(self.shop_inventory) + len(self.special_items):
-                    special_item_name = list(self.special_items.keys())[item_index - len(self.shop_inventory)]
-                    self.buy_special_item(special_item_name)
+            elif item_choice in self.shop_inventory or item_choice in self.special_items:
+                self.buying(item_choice)
+            else:
+                print("Invalid item name! Please enter a valid item from the shop.")
+
+    def buying(self, item_name):
+        """Handles purchasing items, asking for item first, then quantity, and applying purchase multiplier discount."""
+        try:
+            if item_name in self.special_items:
+                # Special items (Super Cool Trophy) use cheese slices instead of coins
+                if self.cheese_instance.cheese_slices >= self.special_items[item_name]:
+                    self.cheese_instance.remove_cheese(self.special_items[item_name])
+                    self.item_instance.add_items(item_name, 1)
+                    print(f"Successfully purchased {item_name}!")
+                    print(f"Remaining Cheese Slices: {self.cheese_instance.cheese_slices}")
                 else:
-                    print("Invalid item number!")
-            else:
-                quantity = int(input("Enter quantity: "))
-                self.buying(item_choice, quantity)
+                    print("You don't have enough cheese slices!")
+                return
 
-    def buying(self, item_name, quantity=1):
-        """Ensures multipliers increase in price and are saved properly."""
-        if item_name in self.special_items:
-            if self.cheese_instance.cheese_slices >= self.special_items[item_name]:
-                self.cheese_instance.remove_cheese(self.special_items[item_name])
-                self.item_instance.add_items(item_name, 1)
-                print(f"Successfully purchased {item_name}!")
-            else:
-                print("You don't have enough cheese slices!")
-            return
-
-        if item_name in self.shop_inventory:
-            if item_name in ["Prize Multiplier Upgrade", "Purchase Multiplier Upgrade"]:
-                quantity = 1  # ✅ Limit to one purchase per transaction
-
-            base_price = self.shop_inventory[item_name] * quantity
-            final_price = base_price * self.upgrades_instances.purchase_multiplier  # ✅ Apply discount
-
-            if self.coins_instance.coins >= final_price:
-                self.coins_instance.remove_coins(final_price)
-
-                # Apply effects directly for multipliers and increase price
-                if item_name == "Prize Multiplier Upgrade":
-                    self.upgrades_instances.add_winning_multiplier()
-                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)  # ✅ Increase price
-                elif item_name == "Purchase Multiplier Upgrade":
-                    self.upgrades_instances.add_purchase_multiplier()
-                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)  # ✅ Increase price
+            if item_name in self.shop_inventory:
+                # If the item is a multiplier, auto-set quantity to 1
+                if item_name in ["Prize Multiplier Upgrade", "Purchase Multiplier Upgrade"]:
+                    quantity = 1
+                    print(f"Multipliers can only be bought one at a time. Quantity set to 1.")
                 else:
-                    self.item_instance.add_items(item_name, quantity)
+                    # Ask for quantity for normal items
+                    quantity = input("Enter quantity: ").strip()
+                    if not quantity.isdigit() or int(quantity) < 1:
+                        print("Invalid quantity. Please enter a valid number (1 or more).")
+                        return
+                    quantity = int(quantity)
 
-                print(f"Successfully purchased {quantity} {item_name}(s) for {final_price:.2f} coins!")
-            else:
-                print("You don't have enough coins!")
+                # Calculate price with discount
+                base_price = self.shop_inventory[item_name] * quantity
+                final_price = base_price * self.upgrades_instances.purchase_multiplier
+
+                # Check if the player has enough coins
+                if self.coins_instance.coins >= final_price:
+                    self.coins_instance.remove_coins(final_price)
+
+                    # Apply effects directly for multipliers
+                    if item_name == "Prize Multiplier Upgrade":
+                        self.upgrades_instances.add_winning_multiplier()
+                        self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)
+                    elif item_name == "Purchase Multiplier Upgrade":
+                        self.upgrades_instances.add_purchase_multiplier()
+                        self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)
+                    else:
+                        self.item_instance.add_items(item_name, quantity)
+
+                    print(f"Successfully purchased {quantity} {item_name}(s) for {final_price:.2f} coins!")
+                    print(f"Remaining Coins: {self.coins_instance.display_coins()}")  # ✅ Show updated balance
+                else:
+                    print("You don't have enough coins!")
+
+        except ValueError:
+            print("Invalid input. Please enter a valid number for quantity.")
 
     def buy_special_item(self, item_name):
         """Handles buying special items using cheese slices."""
