@@ -1,9 +1,9 @@
 import currencyandstuff
-import blackjack
-import cheetah
-import slots
-import riser
-import wof
+from games.blackjack import blackjack
+from games.cheetah import cheetah
+from games.slots import slots
+from games.riser import riser
+from games.wof import wof
 import random
 import json
 
@@ -60,11 +60,11 @@ class MainMenu:
 
     def play_game(self):
         games = {
-            "1": ("blackjack", blackjack.blackjack),
-            "2": ("slots", slots.slots),
-            "3": ("wof", wof.wof),
-            "4": ("multiplier", riser.riser),
-            "5": ("cheetah", cheetah.cheetah)
+            "1": ("blackjack", blackjack),
+            "2": ("slots", slots),
+            "3": ("wof", wof),
+            "4": ("multiplier", riser),
+            "5": ("cheetah", cheetah)
         }
 
         while True:
@@ -225,8 +225,9 @@ if __name__ == "__main__":
     coins = currencyandstuff.Coins()
     items = currencyandstuff.Item()
     cheese = currencyandstuff.Cheese()
-    shop = currencyandstuff.Shop(coins, items, cheese)
+    upgrades = currencyandstuff.Upgrades()
+    shop = currencyandstuff.Shop(coins, items, cheese, upgrades)
 
-    MainMenu.load_data(coins, items, cheese)  # Load previous progress
-    casino = MainMenu(coins, items, cheese, shop)
-    casino.display_menu()
+    currencyandstuff.load_data(coins, items, cheese)
+    main = MainMenu(coins, items, cheese, upgrades, shop)
+    main.display_menu()
