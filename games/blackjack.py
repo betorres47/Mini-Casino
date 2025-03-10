@@ -108,5 +108,6 @@ def blackjack() -> float:
         print(f"multiplier: {result:.3f}x")
         return result                                           # return the result, 2.0/1.0/0.0
 
-
+if __name__ == "__main__":
+    blackjack()
 

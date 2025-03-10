@@ -45,3 +45,5 @@ def wof():                                                                      
         print(f"multiplier: {result:.3f}x")
         return result
 
+if __name__ == "__main__":
+    wof()
