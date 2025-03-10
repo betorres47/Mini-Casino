@@ -10,12 +10,47 @@ class MainMenu:
         self.shop = shop_instance
 
     def display_menu(self):
-        # Main menu options and user input for navigation
-        pass
+        while True:
+            print("\n===== Mini Casino Menu =====")
+            print("1. Play a Game")
+            print("2. View Inventory")
+            print("3. Visit Shop")
+            print("4. View Cheese & Coins")
+            print("5. Save Game")
+            print("6. Load Game")
+            print("7. Exit")
+
+            choice = input("Enter your choice: ").strip()
+
+            if choice == "1":
+                game_name = input("Enter the game you want to play: ").strip()
+                self.play_game(game_name)
+            elif choice == "2":
+                print("Your Inventory:", self.items.display_items())
+            elif choice == "3":
+                self.shop.display_shop()
+                item_name = input("Enter item name to buy or type 'exit' to return: ").strip()
+                if item_name.lower() != 'exit':
+                    quantity = int(input("Enter quantity: "))
+                    self.shop.buying(item_name, quantity)
+            elif choice == "4":
+                print("Coins:", self.coins.display_coins())
+                print("Cheese:", self.cheese.display_cheese())
+            elif choice == "5":
+                filename = input("Enter save file name: ").strip()
+                self.save_data(filename)
+            elif choice == "6":
+                filename = input("Enter save file name: ").strip()
+                self.load_data(filename)
+            elif choice == "7":
+                print("Exiting the casino. See you next time!")
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 7.")
 
     def play_game(self, game_name):
-        # Call the selected game function
-        pass
+
+
 
     def handle_transactions(self, bet_amount, winnings):
         # Apply multipliers and update currency
