@@ -8,6 +8,7 @@
 
 import random
 import time
+from games.win_screen import win
 
 wheel = {                                   # wheel dictionary to define characters on wheel
     0: '=====',
@@ -44,12 +45,13 @@ def slots():                                # slot function for the game itself,
 
     if final_slots[0] == final_slots[1] == final_slots[2]:                          # check if user has won
         result = 9.0
-        print("You have won!")
+        win()
     else:
         result = 0.0                                                                # if not, user has lost
         print("You have lost.")
     print(f"multiplier: {result}")
     return result
+
 
 
 slots()

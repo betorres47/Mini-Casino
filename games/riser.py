@@ -1,4 +1,4 @@
-# - multiplier - beto
+# - riser - beto
 
 # - user is prompted if they are ready
 # - user is shown an animation of a bar rising (numbers going up)
@@ -6,10 +6,11 @@
 # - riser increases by 0.20 per second
 # - enter to stop
 # - if crash, 0, if save, output float @ save
-# - multiplier - beto aka skrog 47
+
 import threading
 import time
 from scipy.stats import gamma
+from games.win_screen import win
 
 k = 0.167
 theta = 102
@@ -27,11 +28,11 @@ animation = {
     9: "[#########-]"
 }
 
-stopped_event = threading.Event()  # Use event instead of boolean
+stopped_event = threading.Event()               # use event (problems with boolean)
 
 def get_input():
     input()
-    stopped_event.set()  # Signal the main thread to stop
+    stopped_event.set()                         # signal the main thread to stop
 
 def riser():
     input("Ready to play? (Enter)")
@@ -40,26 +41,30 @@ def riser():
     lower_count = 0.0
     count = 0
     sample = gamma.rvs(k, scale=theta, size=1) + 4
-    bust_point = sample[0]  # Fix: Extract single value
+    bust_point = sample[0]
 
-    input_thread = threading.Thread(target=get_input)  # Remove daemon=True
+    input_thread = threading.Thread(target=get_input)
     input_thread.start()
 
     percent = 0
+    result = 0.0
+
     while count <= 100:
-        result = lower_count + percent / 10.0
+        result = count / 10.0
 
         if stopped_event.is_set():
-            print("You have won!")
-            print(f"multiplier: {result:.1f}")
+            win()
             break
+
+
 
         if count >= bust_point:
+            result = 0.0
             print("You have crashed!")
-            print("multiplier: 0.0")
             break
 
-        percent = min(percent, 9)  # Fix: Prevent out-of-range key access
+
+        percent = min(percent, 9)                  # prevent out of range error
         print(f"{lower_count}{animation[percent]}{lower_count + 1.0} Win: {result:.1f}")
 
         percent += 1
@@ -69,9 +74,17 @@ def riser():
             lower_count += 1
             percent = 0
 
+
         time.sleep(0.5)
 
-    stopped_event.set()  # Ensure the input thread can stop
-    input_thread.join()  # Wait for the input thread to finish before exiting
+
+    stopped_event.set()
+    input_thread.join()                             # get input threat to stop and join to prevent errors
+
+    print(f"multiplier: {result:.3f}x")
+    return result
 
 riser()
+
+
+

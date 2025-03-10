@@ -14,6 +14,7 @@
 # - error, return error message
 
 import random               # import random to get random numbers
+from games.win_screen import win
 
 suits = {                   # suits dictionary, defines suit strings
     0: 'Clubs',
@@ -94,7 +95,7 @@ def blackjack() -> float:
             result = 0.0
 
         elif dealer_count > 21 or user_count > dealer_count:    # user  winning, dealer busted or user beats dealer
-            print("You have won!")
+            win()
             result = 2.0
 
         elif user_count < dealer_count:                         # user loosing, dealer beats user
@@ -104,7 +105,7 @@ def blackjack() -> float:
         else:                                                   # push
             print("Push")
             result = 1.0
-        print(f"multiplier: {result}")
+        print(f"multiplier: {result:.3f}x")
         return result                                           # return the result, 2.0/1.0/0.0
 
 
