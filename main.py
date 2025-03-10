@@ -155,28 +155,31 @@ class MainMenu:
         print(f"You won {winnings:.2f} coins!")
 
     def use_item(self):
+        """Allows the player to use an item from their inventory if available."""
         if not self.items.items:
             print("You have no items to use.")
             return
 
         print("\n===== Your Items =====")
         for item, qty in self.items.items.items():
-            print(f"{item} (x{qty})")
+            print(f"- {item} (x{qty})")
 
         while True:
-            item_choice = input("Enter the item name to use (or type 'none' to skip): ").strip().lower()
+            item_choice = input("Enter the item name to use (or type 'none' to skip): ").strip()
 
+            if item_choice.lower() == "none":
+                self.active_item = None
+                print("No item selected.")
+                return
+
+            # Ensure the selected item is valid
             if item_choice in self.items.items and self.items.items[item_choice] > 0:
                 print(f"Using {item_choice}...")
-                self.items.remove_item(item_choice)
-                self.active_item = item_choice
-                break
-            elif item_choice == "none":
-                self.active_item = None
-                break
+                self.items.remove_item(item_choice)  # ✅ Remove used item from inventory
+                self.active_item = item_choice  # ✅ Store item to apply effects
+                return
             else:
-                print("Invalid choice or no such item available.")
-
+                print("Invalid choice or no such item available. Please enter a valid item name.")
 
     def apply_item_effects(self, winnings):
         if self.active_item:
@@ -210,11 +213,36 @@ class MainMenu:
             print(f"Error saving game: {e}")
 
     def load_data(self, filename="save"):
-        """Loads player data from a text file, ensuring multiplier prices are restored."""
+        """Loads player data from a text file, ensuring multiplier prices are restored correctly."""
         try:
             with open(filename, "r", encoding="utf-8") as file:
-                for line in file:
-                    key, value = line.strip().split(": ", 1)
+                lines = file.readlines()
+
+            current_section = None  # Track when reading multi-line sections
+
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith("Multiplier Prices"):
+                    current_section = "multipliers"  # Mark that we are reading multipliers next
+                    continue  # Skip header lines
+
+                if current_section == "multipliers":
+                    # Read each multiplier price line safely
+                    parts = line.split(": ", 1)
+                    if len(parts) == 2:
+                        key, value = parts
+                        if key.strip() == "Prize Multiplier Upgrade":
+                            self.shop.shop_inventory["Prize Multiplier Upgrade"] = int(value)
+                        elif key.strip() == "Purchase Multiplier Upgrade":
+                            self.shop.shop_inventory["Purchase Multiplier Upgrade"] = int(value)
+                    continue  # Move to next line
+
+                # Read normal key-value pairs
+                parts = line.split(": ", 1)
+                if len(parts) == 2:
+                    key, value = parts
+                    key = key.strip()
+                    value = value.strip()
 
                     if key == "Coins":
                         self.coins.coins = int(value)
@@ -226,10 +254,7 @@ class MainMenu:
                         self.upgrades.winning_multiplier = float(value)
                     elif key == "Purchase Multiplier":
                         self.upgrades.purchase_multiplier = float(value)
-                    elif key == "  Prize Multiplier Upgrade":
-                        self.shop.shop_inventory["Prize Multiplier Upgrade"] = int(value)
-                    elif key == "  Purchase Multiplier Upgrade":
-                        self.shop.shop_inventory["Purchase Multiplier Upgrade"] = int(value)
+
             print(f"Game loaded from {filename}!")
         except FileNotFoundError:
             print("No save file found! Starting a new game.")
