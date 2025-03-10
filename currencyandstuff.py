@@ -113,7 +113,7 @@ class Shop:
                 self.buying(item_choice, quantity)
 
     def buying(self, item_name, quantity=1):
-        """Handles purchasing items while ensuring multipliers do not appear in inventory."""
+        """Ensures multipliers increase in price and are saved properly."""
         if item_name in self.special_items:
             if self.cheese_instance.cheese_slices >= self.special_items[item_name]:
                 self.cheese_instance.remove_cheese(self.special_items[item_name])
@@ -125,19 +125,21 @@ class Shop:
 
         if item_name in self.shop_inventory:
             if item_name in ["Prize Multiplier Upgrade", "Purchase Multiplier Upgrade"]:
-                quantity = 1  #Force quantity to 1 for multipliers
+                quantity = 1  # ✅ Limit to one purchase per transaction
 
             base_price = self.shop_inventory[item_name] * quantity
-            final_price = base_price * self.upgrades_instances.purchase_multiplier
+            final_price = base_price * self.upgrades_instances.purchase_multiplier  # ✅ Apply discount
 
             if self.coins_instance.coins >= final_price:
                 self.coins_instance.remove_coins(final_price)
 
-                # Apply effects directly for multipliers, do NOT store them in inventory
+                # Apply effects directly for multipliers and increase price
                 if item_name == "Prize Multiplier Upgrade":
                     self.upgrades_instances.add_winning_multiplier()
+                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)  # ✅ Increase price
                 elif item_name == "Purchase Multiplier Upgrade":
                     self.upgrades_instances.add_purchase_multiplier()
+                    self.shop_inventory[item_name] = int(self.shop_inventory[item_name] * 1.5)  # ✅ Increase price
                 else:
                     self.item_instance.add_items(item_name, quantity)
 

@@ -1,9 +1,8 @@
-{
-    "coins": 100000,
-    "items": {},
-    "cheese": {
-        "Cheese Slices": 0
-    },
-    "winning_multiplier": 1.0,
-    "purchase_multiplier": 1.0
-}
+Coins: 100000
+Items: {}
+Cheese Slices: 0
+Winning Multiplier: 1.0
+Purchase Multiplier: 1.0
+Multiplier Prices:
+  Prize Multiplier Upgrade: 10000
+  Purchase Multiplier Upgrade: 10000
