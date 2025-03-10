@@ -121,3 +121,22 @@ class Shop:
         print("\n===== Shop Inventory =====")
         for index, (item, price) in enumerate(self.shop_inventory.items(), start=1):
             print(f"{index}. {item} - {price} coins")
+
+class Upgrades:
+    """Handles upgrades for prize multipliers and purchase discounts."""
+
+    def __init__(self, winning_multiplier=1.0, purchase_multiplier=1.0):
+        self.winning_multiplier = winning_multiplier
+        self.purchase_multiplier = purchase_multiplier
+
+    def add_winning_multiplier(self):
+        """Increases the player's winnings multiplier."""
+        self.winning_multiplier += 0.1
+
+    def add_purchase_multiplier(self):
+        """Decreases the cost of purchases."""
+        self.purchase_multiplier -= 0.05
+
+    def display_both(self):
+        """Returns both multipliers."""
+        return self.winning_multiplier, self.purchase_multiplier

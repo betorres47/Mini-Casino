@@ -228,6 +228,6 @@ if __name__ == "__main__":
     upgrades = currencyandstuff.Upgrades()
     shop = currencyandstuff.Shop(coins, items, cheese, upgrades)
 
-    currencyandstuff.load_data(coins, items, cheese)
+    MainMenu.load_data(coins, items, cheese)
     main = MainMenu(coins, items, cheese, upgrades, shop)
     main.display_menu()
